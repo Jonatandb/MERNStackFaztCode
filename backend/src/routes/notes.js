@@ -5,7 +5,7 @@ const {
   getNoteById,
   updateNote,
   deleteNote,
-} = require("../controllers/Notes.controller");
+} = require("../controllers/notes.controller");
 
 const router = Router();
 
