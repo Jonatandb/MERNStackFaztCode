@@ -9,7 +9,7 @@ export default class Navigation extends Component {
             NotesApp
           </Link>
           <button
-            class="navbar-toggler"
+            className="navbar-toggler"
             type="button"
             data-toggle="collapse"
             data-target="#navbarNav"
@@ -17,22 +17,22 @@ export default class Navigation extends Component {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
-                <Link class="nav-link" to="/">
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item active">
+                <Link className="nav-link" to="/">
                   Notes
                 </Link>
               </li>
-              <li class="nav-item">
-                <Link class="nav-link" to="/create">
+              <li className="nav-item">
+                <Link className="nav-link" to="/create">
                   Create Note
                 </Link>
               </li>
-              <li class="nav-item">
-                <Link class="nav-link" to="/user">
+              <li className="nav-item">
+                <Link className="nav-link" to="/user">
                   Create User
                 </Link>
               </li>
