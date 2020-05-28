@@ -47,7 +47,7 @@ export default class CreateNote extends Component {
       await axios
         .put("http://localhost:4000/api/notes/" + this.state._id, newNote)
         .then((res) => {
-          window.location = "/";
+          this.props.history.push("/");
         })
         .catch((err) => {
           this.setError(err);
@@ -56,7 +56,7 @@ export default class CreateNote extends Component {
       await axios
         .post("http://localhost:4000/api/notes", newNote)
         .then((res) => {
-          window.location = "/";
+          this.props.history.push("/");
         });
     }
   };
