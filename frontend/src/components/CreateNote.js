@@ -10,6 +10,7 @@ export default class CreateNote extends Component {
     title: "",
     content: "",
     date: new Date(),
+    _id: "",
   };
 
   getUsers = async () => {
@@ -42,14 +43,22 @@ export default class CreateNote extends Component {
       author: this.state.selectedUser,
       date: this.state.date,
     };
-    await axios
-      .post("http://localhost:4000/api/notes", newNote)
-      .then((res) => {
-        window.location = "/";
-      })
-      .catch((err) => {
-        this.setError(err);
-      });
+    if (this.state.editing) {
+      await axios
+        .put("http://localhost:4000/api/notes/" + this.state._id, newNote)
+        .then((res) => {
+          window.location = "/";
+        })
+        .catch((err) => {
+          this.setError(err);
+        });
+    } else {
+      await axios
+        .post("http://localhost:4000/api/notes", newNote)
+        .then((res) => {
+          window.location = "/";
+        });
+    }
   };
 
   setError = (err) => {
@@ -64,15 +73,32 @@ export default class CreateNote extends Component {
     }, 5000);
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.getUsers();
+    if (this.props.match.params.id) {
+      await axios
+        .get("http://localhost:4000/api/notes/" + this.props.match.params.id)
+        .then((res) => {
+          this.setState({
+            title: res.data.title,
+            content: res.data.content,
+            date: new Date(res.data.date),
+            selectedUser: res.data.author,
+            _id: res.data._id,
+            editing: true,
+          });
+        })
+        .catch((err) => {
+          this.setError(err);
+        });
+    }
   }
 
   render() {
     return (
       <div className="col-md-6 offset-md-3">
         <div className="card card-body">
-          <h4>Create a Note</h4>
+          <h4>{this.state.editing ? "Edit" : "Create a"} Note</h4>
 
           <div className="form-group">
             <select
