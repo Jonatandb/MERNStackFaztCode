@@ -51,10 +51,16 @@ export default class CreateUser extends Component {
   };
 
   setError = (err) => {
-    this.setState({ error: err });
+    this.setState({
+      error: {
+        message: "An error has occurred. Unable to perform the operation.",
+      },
+    });
     console.log(JSON.stringify(err));
-    setInterval(() => {
-      this.setState({ error: "" });
+    setTimeout(() => {
+      this.setState({
+        error: "",
+      });
     }, 5000);
   };
 

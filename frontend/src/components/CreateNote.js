@@ -13,8 +13,17 @@ export default class CreateNote extends Component {
   };
 
   getUsers = async () => {
-    const res = await axios.get("http://localhost:4000/api/users");
-    this.setState({ users: res.data.map((u) => u.username) });
+    await axios
+      .get("http://localhost:4000/api/users")
+      .then((res) => {
+        this.setState({
+          users: res.data.map((u) => u.username),
+          selectedUser: res.data[0].username,
+        });
+      })
+      .catch((err) => {
+        this.setError(err);
+      });
   };
 
   onInputChange = (e) => {
@@ -25,9 +34,34 @@ export default class CreateNote extends Component {
     this.setState({ date });
   };
 
-  onSubmit = (e) => {
+  onSubmit = async (e) => {
     e.preventDefault();
-    console.log(this.state);
+    const newNote = {
+      title: this.state.title,
+      content: this.state.content,
+      author: this.state.selectedUser,
+      date: this.state.date,
+    };
+    await axios
+      .post("http://localhost:4000/api/notes", newNote)
+      .then((res) => {
+        window.location = "/";
+      })
+      .catch((err) => {
+        this.setError(err);
+      });
+  };
+
+  setError = (err) => {
+    this.setState({
+      error: {
+        message: "An error has occurred. Unable to perform the operation.",
+      },
+    });
+    console.log(JSON.stringify(err));
+    setTimeout(() => {
+      this.setState({ error: "" });
+    }, 5000);
   };
 
   componentDidMount() {
@@ -45,6 +79,7 @@ export default class CreateNote extends Component {
               className="form-control"
               name="selectedUser"
               onChange={this.onInputChange}
+              value={this.state.selectedUser}
             >
               {this.state.users.map((user) => (
                 <option key={user} value={user}>
@@ -61,6 +96,7 @@ export default class CreateNote extends Component {
               placeholder="Title"
               name="title"
               required
+              value={this.state.title}
               onChange={this.onInputChange}
             />
           </div>
@@ -72,6 +108,7 @@ export default class CreateNote extends Component {
               placeholder="Content"
               required
               onChange={this.onInputChange}
+              value={this.state.content}
             ></textarea>
           </div>
 
@@ -89,6 +126,11 @@ export default class CreateNote extends Component {
             </button>
           </form>
         </div>
+        {this.state.error && (
+          <div className="alert alert-danger m-2" role="alert">
+            {JSON.stringify(this.state.error.message)}
+          </div>
+        )}
       </div>
     );
   }
